@@ -3,17 +3,17 @@ const jwt = require('jsonwebtoken')
 
  const shouldBeLoggedIn = async (req,res) => {
 
-    console.log(req.userId);
+    console.log(req.params.id);
 
     return res.status(200).json({message:"You are Authenticated"})
 }
 
  const shouldBeAdmin = async (req,res) => {
-    const token = req.cookies.token
+    
 
-    if(!token){
-        return res.status(401).json({message:"Not Authenticated!"})
-    }
+    // if(!token){
+    //     return res.status(401).json({message:"Not Authenticated!"})
+    // }
 
     jwt.verify(token, process.env.JWT_SECRET, async (err, payload)=>{
         if(err){

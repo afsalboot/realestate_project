@@ -16,6 +16,7 @@ import school from './school.png'
 import search from './search.png'
 import size from './size.png'
 import utility from './utility.png'
+import image_upload from './imageupload.png'
 
 
 export const assets = {
@@ -36,5 +37,6 @@ export const assets = {
     school,
     search,
     size,
-    utility
+    utility,
+    image_upload
 }

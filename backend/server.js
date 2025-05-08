@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 const dotenv = require('dotenv')
 dotenv.config()
 const cors = require('cors')
-const cookieParser = require('cookie-parser');
+
 
 
 const authRoute = require('./routes/auth.route');
@@ -13,7 +13,7 @@ const userRoute = require('./routes/user.route');
 
 app.use(cors({ origin:process.env.CLIENT_URL, credentials:true }))
 app.use(express.json())
-app.use(cookieParser())
+
 
 mongoose.connect(process.env.MONGO_URL).then(()=>{
     console.log("DB Connected")

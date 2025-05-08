@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import './profilePage.scss'
 import List from '../../components/list/List'
 import Chat from '../../components/chat/Chat'
@@ -17,8 +17,9 @@ function ProfilePage() {
 console.log("currentUser", currentUser);
 
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
+    
     
 
     const handleLogout = async () =>{
@@ -43,13 +44,13 @@ console.log("currentUser", currentUser);
                 </div>
                 <div className="info">
                     <span>
-                        Avatar: <img src={currentUser.avatar || assets.noavatar} alt="" />
+                        Avatar: <img src={currentUser?.avatar || assets.noavatar} alt="" />
                     </span>
                     <span>
-                        Username: <b>{currentUser?.user.username}</b>
+                        Username: <b>{currentUser?.username}</b>
                     </span>
                     <span>
-                        E-mail: <b>{currentUser?.user.email}</b>
+                        E-mail: <b>{currentUser?.email}</b>
                     </span>
 
                     <button onClick={handleLogout}>Logout</button>

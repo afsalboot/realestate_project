@@ -13,6 +13,7 @@ const LoginPage = () => {
   const [isLoading,setIsLoading] = useState(false)
 
   const {updateUser} = useContext(AuthContext);
+  
 
   const navigate = useNavigate()
 
@@ -30,9 +31,14 @@ const LoginPage = () => {
         username,
         password,
       });
+        console.log("res****",res.data)
+      // const token = res.data.token;
+      // localStorage.setItem("token", token);
+      // console.log("token extract from user login:",token)
 
       
       updateUser(res.data)
+      console.log(res.data)
 
       navigate('/')
     }catch(err){

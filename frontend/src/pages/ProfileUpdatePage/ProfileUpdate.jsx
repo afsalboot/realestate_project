@@ -2,37 +2,43 @@ import React, { useContext, useState } from 'react';
 import './profileUpdate.scss';
 import { AuthContext } from '../../context/AuthContext';
 import { assets } from '../../assets/assets';
-import apiRequest from '../../lib/apiRequest';
+import  { tokenRequest } from '../../lib/apiRequest';
+import { useNavigate } from 'react-router';
+
 
 const ProfileUpdate = () => {
+
   const [error, setError] = useState("");
+
   const { currentUser, updateUser } = useContext(AuthContext);
-
   
+  const [avatar, setAvatar] = useState(currentUser?.avatar);
 
-  console.log("updateUser", updateUser);
+  const navigate = useNavigate()
+  
   console.log("currentUser", currentUser);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const { username, email, password } = Object.fromEntries(formData);
+    const { username, email, password} = Object.fromEntries(formData);
 
-    console.log("Current User ID:", currentUser?.user._id); 
-
-    // if (!currentUser?._id) {
-    //     setError("User is not authenticated.");
-    //     return;
-    // }
+    console.log("Current User ID:", currentUser?._id);
+    console.log("Current User TOKEN:", currentUser?.token);
+    console.log("current user avatar",currentUser?.avatar);
+    
+    
 
     try {
-      const res = await apiRequest.put(`/users/update/${currentUser?.user._id}`, {
+      console.log('First Check',username,email,password,currentUser._id)
+      const res = await tokenRequest.put(`/users/update/${currentUser?._id}`, {
         username,
         email,
         password,
       });
 
-      updateUser(res.user);
+      updateUser(res.data);
+      navigate('/profile')
       console.log("update user frontend",res.data)
     } catch (err) {
       console.log(err.message);
@@ -52,7 +58,7 @@ const ProfileUpdate = () => {
               id="username"
               name="username"
               type="text"
-              defaultValue={currentUser?.user.username}
+              defaultValue={currentUser?.username}
             />
           </div>
           <div className="item">
@@ -61,12 +67,16 @@ const ProfileUpdate = () => {
               id="email"
               name="email"
               type="email"
-              defaultValue={currentUser?.user.email}
+              defaultValue={currentUser?.email}
             />
           </div>
           <div className="item">
             <label htmlFor="password">Password</label>
             <input id="password" name="password" type="password" />
+          </div>
+          <div className="item">
+            <label htmlFor="avatar">Upload Photo</label>
+            <input id="avatar" name="avatar" type="file" />
           </div>
           <button type="submit">Update</button>
           {error && <span>{error}</span>}
@@ -74,7 +84,7 @@ const ProfileUpdate = () => {
       </div>
       <div className="sideContainer">
         <img
-          src={currentUser.avatar || assets.noavatar}
+          src={ avatar || assets.noavatar}
           alt=""
           className="avatar"
         />

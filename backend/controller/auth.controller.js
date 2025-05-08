@@ -2,7 +2,10 @@ const argon = require('argon2');
 const User = require('../models/user.schema')
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
+
+
 const register = async (req,res) =>{
+    console.log('Third check',req.body)
     const{ username, email, password } = req.body;
 
 
@@ -17,53 +20,45 @@ const register = async (req,res) =>{
     })
     console.log(newUser) 
     return res.status(201).json({message: "User created successfully"})
+
     }catch(err){
+
         console.log(err.message)
         return res.status(500).json({message: "Failed to create user"})
+
     }
    
 }
 
-const login = async (req,res) =>{
- const {username,password} = req.body
-try{
+const login = async (req, res) => {
 
-    //check if the user exists
-    const user = await User.findOne({username})
-    if(!user){
-        console.log("user name missmatched")
-        return res.status(401).json({ message: 'Invalid email or password' });  
-    }
+    try {
+        const userLogin = await User.findOne({ username: req.body.username })
+        console.log("userLogin", userLogin);
 
-    //check the password is correct
-    const isMatch = await argon.verify(user.password, password)
-    if(!isMatch){
-        console.log("password missmatched")
-        return res.status(400).json({ message: 'Invalid email or password' });  
-    }
-    console.log("login user details", user)
-    //generate cookie token and send to user
-
-    const age = 1000 * 60 * 60 * 24 * 7
-
-    const token = jwt.sign(
-        {
-        id: user._id, username: user.username,
-        isAdmin: false,
+        if (!userLogin) {
+            return res.status(401).json("Invalid mail")
         }
-    ,process.env.JWT_SECRET,{expiresIn: age})
 
-    const { password: hashedPassword, ...userData } = user._doc;
+        if (await argon.verify(userLogin.password, req.body.password)) {
+            const token = jwt.sign({
+                 id: userLogin._id 
+                }, process.env.JWT_SECRET, {
+                     expiresIn: '1d' 
+                    })
 
-    return res.cookie("token", token,{
-        httpOnly:true,
-        // secure:true,
-        maxAge: age
-    }).status(200).json({ user:userData })
-}catch(err){
-    console.log("user login error",err.message)
-    return res.status(500).json({message: "login failed"})
-}
+            console.log("token***", token);
+
+            const { password, ...userWithoutPassword } = userLogin._doc;
+
+            return res.status(200).json({  ...userWithoutPassword, token: token, message: "Login successful" });
+        } else {
+            return res.status(401).json("Invalid password")
+        }
+    } catch (err) {
+        console.log("login error:",err.message)
+        return res.status(500).json({message: "Failed to login"})
+    }
 }
 
 const logout = (req,res) =>{

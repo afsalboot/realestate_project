@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import './register.scss'
 import { assets } from '../../assets/assets'
 import { Link, useNavigate } from 'react-router'
-import axios from 'axios'
 import apiRequest from '../../lib/apiRequest'
 
 const RegisterPage = () => {
@@ -23,6 +22,7 @@ const RegisterPage = () => {
     const password = formData.get("password")
 
     try{
+      console.log('first check',username,email,password)
       const res = await apiRequest.post("/auth/register",{
         username,email,password
       })
