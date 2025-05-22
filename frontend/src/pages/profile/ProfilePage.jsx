@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react'
 import './profilePage.scss'
 import List from '../../components/list/List'
 import Chat from '../../components/chat/Chat'
-import apiRequest from '../../lib/apiRequest'
+import { apiRequest } from '../../lib/apiRequest'
 import { Link, useNavigate } from 'react-router'
 import {AuthContext} from "../../context/AuthContext"
 import { assets } from '../../assets/assets'
@@ -58,7 +58,11 @@ console.log("currentUser", currentUser);
                 </div>
                 <div className="title">
                     <h1>My List</h1>
+
+                    <Link to={'/add'}>
                     <button>Create New Post</button>
+                    </Link>
+                    
                 </div>
                 <List/>
                 <div className="title">

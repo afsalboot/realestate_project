@@ -3,7 +3,9 @@ import axios from 'axios'
 
 const Urls = "http://localhost:4000/api"
 
-const apiRequest = axios.create({
+
+
+export const apiRequest = axios.create({
     baseURL: Urls,
 });
 
@@ -23,15 +25,18 @@ if(localstorage ) {
             tokenValue = userData.token;
         }
     }catch(err){
-        console.error('Failed to parse userData:', err);
+        console.error('Failed to parse userData:', err.message);
     }
 }
 
-console.log("TokenValue",tokenValue);
+console.log('Sending token:', tokenValue);
 
-export const tokenRequest = axios.create({
+
+
+ export const tokenRequest = axios.create({
     baseURL: Urls,
-    headers:{token:tokenValue}
+    headers: {
+    Authorization: `Bearer ${tokenValue}`
+  }
 })
 
-export default apiRequest;

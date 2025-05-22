@@ -37,12 +37,12 @@ const login = async (req, res) => {
         console.log("userLogin", userLogin);
 
         if (!userLogin) {
-            return res.status(401).json("Invalid mail")
+            return res.status(401).json("Invalid credentials")
         }
 
         if (await argon.verify(userLogin.password, req.body.password)) {
             const token = jwt.sign({
-                 id: userLogin._id 
+                 userId: userLogin._id 
                 }, process.env.JWT_SECRET, {
                      expiresIn: '1d' 
                     })
@@ -51,9 +51,11 @@ const login = async (req, res) => {
 
             const { password, ...userWithoutPassword } = userLogin._doc;
 
+            console.log('userWithoutPass###',userWithoutPassword);
+
             return res.status(200).json({  ...userWithoutPassword, token: token, message: "Login successful" });
         } else {
-            return res.status(401).json("Invalid password")
+            return res.status(401).json("Invalid credentials")
         }
     } catch (err) {
         console.log("login error:",err.message)

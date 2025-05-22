@@ -4,11 +4,11 @@ const cloudinary = require('cloudinary').v2
 
 
 
-// cloudinary.config({ 
-//     cloud_name:process.env.CLOUD_NAME, 
-//     api_key:process.env.API_KEY, 
-//     api_secret:process.env.API_SECRET
-// });
+cloudinary.config({ 
+    cloud_name:process.env.CLOUD_NAME, 
+    api_key:process.env.API_KEY, 
+    api_secret:process.env.API_SECRET
+});
 
 
 
@@ -29,6 +29,8 @@ const getUsers = async (req,res) => {
 const getUser = async (req,res) => {
     const id = req.params.id;
 
+    console.log("id****####",id);
+
     try{
         const user = await User.findById(id)
        return res.status(200).json({UserbyId:user})
@@ -48,12 +50,12 @@ const updateUser = async (req, res) => {
         const { password, ...updateFields } = req.body;
 
 
-        // if (req.file) {
-        //     const hostedImage = await cloudinary.uploader.upload(req.file.path);
-        //     updateFields.avatar = hostedImage.secure_url;
-        // } else if (avatar === null) {
-        //     updateFields.avatar = null;
-        // }
+        if (req.file) {
+            const hostedImage = await cloudinary.uploader.upload(req.file.path);
+            updateFields.avatar = hostedImage.secure_url;
+        } else {
+            updateFields.avatar = undefined
+        }
 
 
         if (password) {

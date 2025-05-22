@@ -8,6 +8,7 @@ import ProfilePage from './pages/profile/ProfilePage'
 import LoginPage from './pages/loginPage/LoginPage'
 import RegisterPage from './pages/register/RegisterPage'
 import ProfileUpdate from './pages/ProfileUpdatePage/ProfileUpdate'
+import NewPostPage from './pages/newPostPage/NewPostPage'
 
 const App = () => {
 
@@ -49,6 +50,10 @@ const App = () => {
         {
           path: "/profile/update",
           element: <ProfileUpdate/>
+        },
+        {
+          path: "/add",
+          element: <NewPostPage/>
         },
       ]
     }

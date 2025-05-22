@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import './profileUpdate.scss';
 import { AuthContext } from '../../context/AuthContext';
 import { assets } from '../../assets/assets';
-import  { tokenRequest } from '../../lib/apiRequest';
+import   {tokenRequest}  from '../../lib/apiRequest';
 import { useNavigate } from 'react-router';
 
 
@@ -12,7 +12,9 @@ const ProfileUpdate = () => {
 
   const { currentUser, updateUser } = useContext(AuthContext);
   
-  const [avatar, setAvatar] = useState(currentUser?.avatar);
+  const [avatar, setAvatar] = useState({});
+
+ 
 
   const navigate = useNavigate()
   
@@ -21,7 +23,7 @@ const ProfileUpdate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const { username, email, password} = Object.fromEntries(formData);
+    const { username, email, password, avatar} = Object.fromEntries(formData);
 
     console.log("Current User ID:", currentUser?._id);
     console.log("Current User TOKEN:", currentUser?.token);
@@ -35,7 +37,12 @@ const ProfileUpdate = () => {
         username,
         email,
         password,
-      });
+        avatar,
+      },{
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  });
 
       updateUser(res.data);
       navigate('/profile')
@@ -76,7 +83,7 @@ const ProfileUpdate = () => {
           </div>
           <div className="item">
             <label htmlFor="avatar">Upload Photo</label>
-            <input id="avatar" name="avatar" type="file" />
+            <input id="avatar" name="avatar" type="file" onChange={(e)=>setAvatar(e.target.files[0])} />
           </div>
           <button type="submit">Update</button>
           {error && <span>{error}</span>}
@@ -84,7 +91,7 @@ const ProfileUpdate = () => {
       </div>
       <div className="sideContainer">
         <img
-          src={ avatar || assets.noavatar}
+          src={currentUser?.avatar||assets.noavatar}
           alt=""
           className="avatar"
         />

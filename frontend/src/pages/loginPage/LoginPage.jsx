@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import "./loginPage.scss"
 import { Link, useNavigate } from 'react-router'
 import { assets } from '../../assets/assets'
-import apiRequest from '../../lib/apiRequest'
+import {apiRequest} from '../../lib/apiRequest'
 import { AuthContext } from '../../context/AuthContext'
 
 const LoginPage = () => {
@@ -32,14 +32,9 @@ const LoginPage = () => {
         password,
       });
         console.log("res****",res.data)
-      // const token = res.data.token;
-      // localStorage.setItem("token", token);
-      // console.log("token extract from user login:",token)
-
-      
+     
       updateUser(res.data)
       console.log(res.data)
-
       navigate('/')
     }catch(err){
       console.log(err.message)

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import './register.scss'
 import { assets } from '../../assets/assets'
 import { Link, useNavigate } from 'react-router'
-import apiRequest from '../../lib/apiRequest'
+import {apiRequest} from '../../lib/apiRequest'
 
 const RegisterPage = () => {
 
