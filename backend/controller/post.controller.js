@@ -34,11 +34,10 @@ const getPost = async (req,res) => {
 
 const addPost = async (req, res) => {
   const body = req.body;
-  const tokenUserId = req.userId;
+//   const tokenUserId = userId;
 
-  console.log("tokenUserId",tokenUserId);
-  console.log("postdetails",body.postDetails);
-  console.log("postdata",body.postData);
+console.log('#####',body);
+
 
   if (!req.files || req.files.length === 0) {
     return res.status(400).json({ message: "No images uploaded." });
@@ -55,12 +54,15 @@ const addPost = async (req, res) => {
       imageUrls.push(uploadedImage.secure_url);
     }
 
-    const newPost = new Post({
-      ...body.postData,
-      userId: tokenUserId,
-      postDetails: body.postDetails,
-      images: imageUrls,
-    });
+    // const newPost = new Post({
+    //   ...body.postData,
+    //   userId: tokenUserId,
+    //   postDetails: body.postDetails,
+    // });
+
+    const newPost = new Post({...body, images: imageUrls})
+
+
 
     await newPost.save();
 

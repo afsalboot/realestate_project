@@ -11,6 +11,9 @@ export const apiRequest = axios.create({
 
 
 
+
+
+
 const localstorage = localStorage.getItem('userData')
 
 let tokenValue = null;
@@ -31,12 +34,9 @@ if(localstorage ) {
 
 console.log('Sending token:', tokenValue);
 
-
-
- export const tokenRequest = axios.create({
+export const tokenRequest = axios.create({
     baseURL: Urls,
     headers: {
-    Authorization: `Bearer ${tokenValue}`
-  }
+        token: tokenValue
+    }
 })
-

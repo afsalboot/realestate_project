@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import './newpostpage.scss'
-import { Editor } from '@tinymce/tinymce-react';
+// import { Editor } from '@tinymce/tinymce-react';
 import {tokenRequest} from '../../lib/apiRequest';
 import { useNavigate } from 'react-router';
 
@@ -9,98 +9,70 @@ import { useNavigate } from 'react-router';
 
 
 const NewPostPage = () => {
+  
+  const navigate = useNavigate()
+  
+  
+  const [images,setImages] = useState([])
+  const [error,setError] = useState("")
+  const [data,setData] = useState({
 
-    const navigate = useNavigate()
+    title: String,
+    price: Number,
+    address: String,
+    city: String,
+    bedroom: Number,
+    bathroom: Number,
+    latitude: String,
+    longitude: String,
+    utilities: String,
+    pet: String,
+    income: String,
+    size: Number, 
+    school: Number,
+    bus: Number, 
+    restaurant: Number, 
+    type: String, 
+    property: String,
+    desc: String,
     
-    const [value,setValue] = useState("")
-    const [images,setImages] = useState([])
-    const [error,setError] = useState("")
+
+  })
+
+  const handleFileChange =(e)=>{
+    const files = Array.from(e.target.files);
+    setImages(files);
+  }
+
+    
+
+    const handleChange = (e) => {
+      const {name,value} = e.target
+      setData({
+        ...data, [name]: value
+      })
+    }
 
     const handleSumbit = async (e)=>{
         e.preventDefault()
-        const formData = new FormData(e.target)
-        const inputs = Object.fromEntries(formData)
+
+        const datas =  {...data,images}
+
+        console.log('datas in add post', datas);
 
         try {
-            const res = await tokenRequest.post("/posts/add",{
-                postData: {
-                    title: inputs.title,
-                    price: parseInt(inputs.price),
-                    address: inputs.address,
-                    city: inputs.city,
-                    bedroom: parseInt(inputs.bedroom),
-                    bathroom: parseInt(inputs.bathroom),
-                    type: inputs.type,
-                    property: inputs.property,
-                    latitude: inputs.latitude,
-                    longitude: inputs.longitude,
-                    images: images,
-                },
-
-                postDetails:{
-                    desc: value,
-                    utilities: inputs.utilities,
-                    pet: inputs.pet,
-                    income: inputs.income,
-                    size: parseInt(inputs.size),
-                    school: parseInt(inputs.school),
-                    bus: parseInt(inputs.bus),
-                    restaurant: parseInt(inputs.restaurant),
-                }
-            },{
+            const res = await tokenRequest.post("/posts/add",datas,{
     headers: {
       'Content-Type': 'multipart/form-data'
     }
     });
-    navigate('/' + res.data.id)
+    // navigate('/' + res.data.id)
+    console.log("data post page",data);
         } catch (err) {
             console.log(err.message);
             setError(err.message)
         }
     }
-
-//     const handleSumbit = async (e) => {
-//   e.preventDefault();
-
-//   const formData = new FormData();
-
-//   // Append form inputs
-//   formData.append("title", e.target.title.value);
-//   formData.append("price", e.target.price.value);
-//   formData.append("address", e.target.address.value);
-//   formData.append("city", e.target.city.value);
-//   formData.append("bedroom", e.target.bedroom.value);
-//   formData.append("bathroom", e.target.bathroom.value);
-//   formData.append("latitude", e.target.latitude.value);
-//   formData.append("longitude", e.target.longitude.value);
-//   formData.append("type", e.target.type.value);
-//   formData.append("property", e.target.property.value);
-//   formData.append("utilities", e.target.utilities.value);
-//   formData.append("pet", e.target.pet.value);
-//   formData.append("income", e.target.income.value);
-//   formData.append("size", e.target.size.value);
-//   formData.append("school", e.target.school.value);
-//   formData.append("bus", e.target.bus.value);
-//   formData.append("restaurant", e.target.restaurant.value);
-//   formData.append("desc", value); // TinyMCE value
-
-//   // Append each image file
-//   const files = e.target.image.files;
-//   for (let i = 0; i < files.length; i++) {
-//     formData.append("images", files[i]);
-//   }
-
-//   try {
-//     const res = await tokenRequest.post("/posts/add", formData);
-//     navigate('/' + res.data.id);
-//   } catch (err) {
-//     console.log(err);
-//     setError(err.response?.data?.message || err.message);
-//   }
-// };
-
-
-
 
   return (
     <div className="newPostPage">
@@ -110,19 +82,20 @@ const NewPostPage = () => {
           <form onSubmit={handleSumbit} >
             <div className="item">
               <label htmlFor="title">Title</label>
-              <input id="title" name="title" type="text" />
+              <input id="title" name="title" type="text" onChange={handleChange}/>
             </div>
             <div className="item">
               <label htmlFor="price">Price</label>
-              <input id="price" name="price" type="number" />
+              <input id="price" name="price" type="number" onChange={handleChange} />
             </div>
             <div className="item">
               <label htmlFor="address">Address</label>
-              <input id="address" name="address" type="text" />
+              <input id="address" name="address" type="text" onChange={handleChange} />
             </div>
             <div className="item description">
               <label htmlFor="desc">Description</label>
-               <Editor
+              <textarea className='editor' id='desc' onChange={handleChange} name='desc' />
+               {/* <Editor
                     apiKey='zaoyzlvkr7cui159rz3y65croqj9f3jxv1oimnidkjixphye'
                     onChange={setValue} 
                     value={value}
@@ -140,41 +113,41 @@ const NewPostPage = () => {
                         'removeformat | help',
                     content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
                     }}
-                />
+                /> */}
             </div>
             <div className="item">
               <label htmlFor="city">City</label>
-              <input id="city" name="city" type="text" />
+              <input id="city" name="city" type="text" onChange={handleChange}/>
             </div>
             <div className="item">
               <label htmlFor="bedroom">Bedroom Number</label>
-              <input min={1} id="bedroom" name="bedroom" type="number" />
+              <input min={1} id="bedroom" name="bedroom" type="number" onChange={handleChange}/>
             </div>
             <div className="item">
               <label htmlFor="bathroom">Bathroom Number</label>
-              <input min={1} id="bathroom" name="bathroom" type="number" />
+              <input min={1} id="bathroom" name="bathroom" type="number" onChange={handleChange}/>
             </div>
             <div className="item">
               <label htmlFor="latitude">Latitude</label>
-              <input id="latitude" name="latitude" type="text" />
+              <input id="latitude" name="latitude" type="text" onChange={handleChange}/>
             </div>
             <div className="item">
               <label htmlFor="longitude">Longitude</label>
-              <input id="longitude" name="longitude" type="text" />
+              <input id="longitude" name="longitude" type="text" onChange={handleChange}/>
             </div>
             <div className="item">
               <label htmlFor="type">Type</label>
-              <select name="type">
+              <select onChange={handleChange} name="type">
                 <option value="rent" defaultChecked>
                   Rent
                 </option>
-                <option value="buy">Buy</option>
+                <option  value="buy">Buy</option>
               </select>
             </div>
             <div className="item">
               <label htmlFor="type">Property</label>
-              <select name="property">
-                <option value="apartment">Apartment</option>
+              <select onChange={handleChange} name="property">
+                <option  value="apartment">Apartment</option>
                 <option value="house">House</option>
                 <option value="condo">Condo</option>
                 <option value="land">Land</option>
@@ -183,7 +156,7 @@ const NewPostPage = () => {
 
             <div className="item">
               <label htmlFor="utilities">Utilities Policy</label>
-              <select name="utilities">
+              <select onChange={handleChange} name="utilities">
                 <option value="owner">Owner is responsible</option>
                 <option value="tenant">Tenant is responsible</option>
                 <option value="shared">Shared</option>
@@ -191,41 +164,34 @@ const NewPostPage = () => {
             </div>
             <div className="item">
               <label htmlFor="pet">Pet Policy</label>
-              <select name="pet">
+              <select onChange={handleChange} name="pet">
                 <option value="allowed">Allowed</option>
                 <option value="not-allowed">Not Allowed</option>
               </select>
             </div>
             <div className="item">
               <label htmlFor="income">Income Policy</label>
-              <input
-                id="income"
-                name="income"
-                type="text"
-                placeholder="Income Policy"
-              />
+              <input id="income" name="income" type="text" placeholder="Income Policy" onChange={handleChange} />
             </div>
             <div className="item">
               <label htmlFor="size">Total Size (sqft)</label>
-              <input min={0} id="size" name="size" type="number" />
+              <input min={0} id="size" name="size" type="number" onChange={handleChange} />
             </div>
             <div className="item">
               <label htmlFor="school">School</label>
-              <input min={0} id="school" name="school" type="number" />
+              <input min={0} id="school" name="school" type="number" onChange={handleChange} />
             </div>
             <div className="item">
               <label htmlFor="bus">bus</label>
-              <input min={0} id="bus" name="bus" type="number" />
+              <input min={0} id="bus" name="bus" type="number" onChange={handleChange} />
             </div>
             <div className="item">
               <label htmlFor="restaurant">Restaurant</label>
-              <input min={0} id="restaurant" name="restaurant" type="number" />
+              <input min={0} id="restaurant" name="restaurant" type="number" onChange={handleChange} />
             </div>
             <div className="item">
               <label htmlFor="image">Upload Photo(Max-4)</label>
-              <input id="image" name="image" type="file" onChange={(e) => { const files = Array.from(e.target.files);
-                 const imageUrls = files.map(file => URL.createObjectURL(file)); setImages(imageUrls);
-                  }} multiple />
+              <input id="image" name="image" type="file" onChange={handleFileChange} multiple />
             </div>
             <div className="buttonContainer">
               <button className="sendButton">Add</button>

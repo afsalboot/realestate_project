@@ -8,7 +8,7 @@ const Map = ({items}) => {
   console.log("items received in Map:", items, Array.isArray(items));
   return (
     
-    <MapContainer center={[52.4797, -1.90269]} zoom={7} scrollWheelZoom={false} className='map'>
+    <MapContainer center={[9.390132949381439, 76.87826950781694]} zoom={7} scrollWheelZoom={false} className='map'>
     <TileLayer
       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

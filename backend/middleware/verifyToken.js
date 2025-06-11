@@ -6,8 +6,8 @@ require('dotenv').config()
 
 const verifyToken = (req,res,next) => {
 
-    const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(' ')[1];
+    const authHeader = req.headers.token;
+  const token = authHeader
 
   console.log("Authorization header:", authHeader);
   console.log("token value", token);
@@ -20,11 +20,18 @@ const verifyToken = (req,res,next) => {
             console.log("Data value:",data);
            
             if(err){
+                if (err.name === "TokenExpiredError") {
+                    console.log("Token has expired");
+                    return res.status(401).json('token expired');
+                }
+
                 console.log("JWT verify error:", err.message);
                 return res.status(401).json('invalid token')
             } 
                 console.log("Decoded data:", data);
+                console.log("userId in data:", data.userId);
                 
+                userId = data.userId;
 
             if(req.params.id == data.userId){
                 next()

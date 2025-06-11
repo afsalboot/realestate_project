@@ -2,8 +2,6 @@
 
 .searchBar {
   .type {
-
-
     button {
       padding: 16px 36px;
       border: 1px solid #999;
@@ -21,12 +19,14 @@
         border-top-left-radius: 5px;
         border-right: none;
       }
-      &:last-child {
+      &:last-of-type {
         border-top-right-radius: 5px;
         border-left: none;
       }
     }
   }
+
+
 
   form {
     border: 1px solid #999;
@@ -79,7 +79,7 @@
       align-items: center;
       justify-content: center;
 
-      button {
+      .search-btn {
         border: none;
         cursor: pointer;
         background-color: #fece51;

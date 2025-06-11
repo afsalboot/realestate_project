@@ -39,16 +39,20 @@
             width: 100%;
             height: 320px;
 
-            .quill > .ql-container > .ql-editor{
-              height: 200px;
-              font-size: 16px;
+            .editor{
+              min-width: 730px;
+              min-height: 260px;
+              resize: none;
+              font-size: 18px;
+              font-style: normal;
+              padding: 10px;
             }
           }
         }
         .buttonContainer {
           width: 100%;
           display: flex;
-          justify-content: end;
+          justify-content: center;
 
 
           .sendButton {
@@ -82,4 +86,15 @@
       border-radius: 5px;
     }
   }
+}
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number]{
+    -moz-appearance: textfield;
 }
